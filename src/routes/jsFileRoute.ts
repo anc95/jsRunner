@@ -25,14 +25,9 @@ jsFileRoute.get('*', function (req, res, next) {
         }
 
         if (stat && stat.isFile()) {
-            // const body  = fs.readFileSync(filePath)
-            // buildJs(body)
             const config = resolveWebpackConfig(option, filePath)
-            buildJs(config, (err:Error, stat: Stats) => {
+            buildJs(config, req.app, (err:Error, stat: Stats) => {
                 if (!err) {
-                    res.type('html')
-                    res.set('Content-Type', 'text/html');
-                    console.log(fs.readFileSync(path.resolve(process.cwd(), 'dist/index.html'), 'utf-8'))
                     res.send(fs.readFileSync(path.resolve(process.cwd(), 'dist/index.html'), 'utf-8'))
                 }
             })
