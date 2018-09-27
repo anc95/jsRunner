@@ -11,12 +11,13 @@ export default function resolveOption(option: Option): Option {
     const defaultOption = {
         dir: process.cwd(),
         plugins: [],
-        port: []
+        loaders: [],
+        port: 8888
     }
 
     for (let key of Object.keys(option)) {
         if (!option[key]) {
-            option[key] = defaultOption[key]
+            option[key] = (<Option>defaultOption)[key]
         }
     }
 

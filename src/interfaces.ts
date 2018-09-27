@@ -1,10 +1,12 @@
 export interface Option {
-    dir?: String | String[]
-    plugins?: Plugin[]
+    dir?: string | string[]
+    plugins?: any[],
+    loaders?: [],
     port?: number
+    [propName: string]: any
 }
 
 export interface RunJs {
-    start()
-    stop()
+    start(): any
+    stop(): any
 }
