@@ -13,6 +13,7 @@ import {
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 
+<<<<<<< HEAD
 function getFilePath(config: Configuration): string {
     const output = config.output || {}
     let {
@@ -31,10 +32,24 @@ export default function bundleJs(webpackOptions: Configuration, app: Application
     }))
 
     app.use(webpackHotMiddleware(compiler, {
+=======
+export default function bundleJs<Callback>(webpackOptions: Configuration, app: Application, callback: any) {
+    const compile = webpack(<Configuration>webpackOptions)
+    const instance = webpackDevMiddleware(compile)
+    app.use(webpackDevMiddleware(compile))
+    app.use(webpackHotMiddleware(compile, {
+>>>>>>> d5b073921ea5fd056e11875907865bab78026024
         log: console.log,
         path: '/__webpack_hmr',
         heartbeat: 10 * 1000
     }))
+<<<<<<< HEAD
 
     callback()
+=======
+    instance.waitUntilValid(() => {
+        console.log(1)
+        callback()
+    });
+>>>>>>> d5b073921ea5fd056e11875907865bab78026024
 }
