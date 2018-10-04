@@ -13,17 +13,28 @@ import {
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 
-export default function bundleJs<Callback>(webpackOptions: Configuration, app: Application, callback: any) {
-    const compile = webpack(<Configuration>webpackOptions)
-    const instance = webpackDevMiddleware(compile)
-    app.use(webpackDevMiddleware(compile))
-    app.use(webpackHotMiddleware(compile, {
+function getFilePath(config: Configuration): string {
+    const output = config.output || {}
+    let {
+        publicPath = "/",
+        filename = "main.js"
+    } = output
+
+    return `${publicPath}${filename}`
+}
+
+export default function bundleJs(webpackOptions: Configuration, app: Application, callback: any) {
+    const compiler = webpack(<Configuration>webpackOptions)
+
+    app.use(webpackDevMiddleware(compiler, {
+        logLevel: 'warn', publicPath: '/'
+    }))
+
+    app.use(webpackHotMiddleware(compiler, {
         log: console.log,
         path: '/__webpack_hmr',
         heartbeat: 10 * 1000
     }))
-    instance.waitUntilValid(() => {
-        console.log(1)
-        callback()
-    });
+
+    callback()
 }

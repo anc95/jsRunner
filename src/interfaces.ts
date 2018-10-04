@@ -10,3 +10,8 @@ export interface RunJs {
     start(): any
     stop(): any
 }
+
+export interface WebpackConfigger {
+    addEntry(moduleName: string, entry: string): any
+    removeEntry(moduleName: string): void
+}

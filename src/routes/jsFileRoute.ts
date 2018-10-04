@@ -4,18 +4,33 @@ import {
 import path from 'path'
 import fs from 'fs'
 import buildJs from '../core/buildJs'
-import resolveWebpackConfig from '../core/resolveWebpackConfig'
+import CONFIG from '../config'
+import _ from 'lodash'
+
 import {
-    Stats
+    Stats, Configuration, Output
 } from 'webpack';
 
 const jsFileRoute = Router()
 
+function resolveModuleName(path: string): string {
+    path = path.replace(/\//g, '')
+    console.log(path)
+    return encodeURIComponent(path)
+}
+
+function calOutputPathName(config: Configuration, moduleName: string): string {
+    const publicPath = (<Output>config.output).publicPath
+
+    return path.resolve('/', moduleName)
+}
+
 jsFileRoute.get('*', function (req, res, next) {
-    const option = req.app.locals.option
     const {
-        dir
-    } = req.app.locals.option
+        option,
+        webpackConfigger
+    } = req.app.locals
+    const dir = option.dir
 
     const filePath = path.join(dir, req.path)
 
@@ -25,11 +40,14 @@ jsFileRoute.get('*', function (req, res, next) {
         }
 
         if (stat && stat.isFile()) {
-            const config = resolveWebpackConfig(option, filePath)
-            buildJs(config, req.app, (err:Error, stat: Stats) => {
-                if (!err) {
-                    res.send(fs.readFileSync(path.resolve(process.cwd(), 'dist/index.html'), 'utf-8'))
-                }
+            const moduleName = resolveModuleName(filePath)
+            webpackConfigger.addEntry(moduleName, filePath)
+            buildJs(webpackConfigger.config, req.app, () => {
+                res.send(
+                    _.template(CONFIG.INDEX_TEMPLATE)({
+                        serveredFilePath: calOutputPathName(webpackConfigger.config, moduleName)
+                    })
+                )
             })
         }
     })

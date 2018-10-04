@@ -19,6 +19,7 @@ import {
 import express from 'express'
 import { Server } from 'http'
 import resolveOption from './core/resolveOption'
+import WebpackConfiggerImpl from './core/webpackConfiggerImpl'
 
 export default class RunJsImp implements RunJs {
     private app: Express
@@ -26,15 +27,20 @@ export default class RunJsImp implements RunJs {
 
     constructor(private option: Option) {}
 
-    start() {
+    private assignToLocals() {
+
+    }
+
+    public start() {
         this.app = express()
         this.app.locals.option = resolveOption(this.option)
+        this.app.locals.webpackConfigger = new WebpackConfiggerImpl(this.option)
         this.app.use('/_bundle', bundleFileRoute)
         this.app.use('/', jsFileRoute)
         this.server = this.app.listen(this.option.port || 8888)
     }
 
-    stop() {
+    public stop() {
         this.server.close()
     }
 }
