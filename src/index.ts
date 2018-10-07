@@ -21,6 +21,7 @@ import serverIndex from 'serve-index'
 import { Server } from 'http'
 import resolveOption from './core/resolveOption'
 import WebpackConfiggerImpl from './core/webpackConfiggerImpl'
+import EntryImpl from './core/entryImpl'
 
 export default class RunJsImp implements RunJs {
     private app: Express
@@ -28,14 +29,18 @@ export default class RunJsImp implements RunJs {
 
     constructor(private option: Option) {}
 
-    private assignToLocals() {
+    private ensureEntry() {
+        const entryHandler = new EntryImpl(this.app.locals.option.dir, '.jsrunner-entry')
+        entryHandler.ensureEntryDir()
 
+        return entryHandler
     }
 
     public start() {
         this.app = express()
         this.app.locals.option = resolveOption(this.option)
         this.app.locals.webpackConfigger = new WebpackConfiggerImpl(this.option)
+        this.app.locals.entryHandler = this.ensureEntry()
         this.app.use('/', jsFileRoute)
         this.app.use(express.static(this.app.locals.option.dir), serverIndex(this.app.locals.option.dir, {icons: true}))
         this.server = this.app.listen(this.option.port || 8888)

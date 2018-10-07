@@ -1,5 +1,5 @@
 export interface Option {
-    dir?: string | string[]
+    dir?: string
     plugins?: any[],
     loaders?: [],
     port?: number
@@ -14,4 +14,8 @@ export interface RunJs {
 export interface WebpackConfigger {
     addEntry(moduleName: string, entry: string): any
     removeEntry(moduleName: string): void
+}
+
+export interface Entry {
+    ensureEntryDir(): string
 }

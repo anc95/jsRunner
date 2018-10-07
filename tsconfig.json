@@ -7,11 +7,7 @@
     "rootDir": "./src",
     "strict": true,
     "allowSyntheticDefaultImports": true,
-<<<<<<< HEAD
     // "noImplicitAny": true,
-=======
-    "noImplicitAny": true,
->>>>>>> d5b073921ea5fd056e11875907865bab78026024
     "esModuleInterop": true,
     "watch": true
   },
