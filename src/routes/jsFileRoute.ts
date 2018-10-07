@@ -25,6 +25,10 @@ function calOutputPathName(config: Configuration, moduleName: string): string {
     return path.resolve('/', moduleName)
 }
 
+function isJsFile(filePath: string): boolean {
+    return /\.(js|es6|es|jsx|ts|tsx)$/.test(filePath.toLocaleLowerCase())
+}
+
 jsFileRoute.get('*', function (req, res, next) {
     const {
         option,
@@ -33,6 +37,10 @@ jsFileRoute.get('*', function (req, res, next) {
     const dir = option.dir
 
     const filePath = path.join(dir, req.path)
+
+    if (!isJsFile(filePath)) {
+        return next()
+    }
 
     fs.stat(filePath, (err, stat) => {
         if (err) {
@@ -49,6 +57,9 @@ jsFileRoute.get('*', function (req, res, next) {
                     })
                 )
             })
+        }
+        else {
+            next()
         }
     })
 })

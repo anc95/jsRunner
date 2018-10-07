@@ -17,6 +17,7 @@ import {
     bundleFileRoute
 } from './routes/index'
 import express from 'express'
+import serverIndex from 'serve-index'
 import { Server } from 'http'
 import resolveOption from './core/resolveOption'
 import WebpackConfiggerImpl from './core/webpackConfiggerImpl'
@@ -35,8 +36,8 @@ export default class RunJsImp implements RunJs {
         this.app = express()
         this.app.locals.option = resolveOption(this.option)
         this.app.locals.webpackConfigger = new WebpackConfiggerImpl(this.option)
-        this.app.use('/_bundle', bundleFileRoute)
         this.app.use('/', jsFileRoute)
+        this.app.use(express.static(this.app.locals.option.dir), serverIndex(this.app.locals.option.dir, {icons: true}))
         this.server = this.app.listen(this.option.port || 8888)
     }
 
