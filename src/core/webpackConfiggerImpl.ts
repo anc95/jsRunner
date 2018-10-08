@@ -44,7 +44,6 @@ export default class WebpackConfiggerImpl implements WebpackConfigger {
                 rules: defaultLoaders.concat(<[]>loaders)
             },
             output: {
-                publicPath: '/__jsRuner__/',
                 path: path.resolve(dir as string, 'dist'),
                 filename: '[name]'
             },
@@ -60,10 +59,16 @@ export default class WebpackConfiggerImpl implements WebpackConfigger {
     public addEntry(moduleName: string, entryPath: string) {
         const entry = this.config.entry as WebpackEntry
 
+        if (entry[moduleName]) {
+            return false
+        }
+
         entry[moduleName] = [
             'webpack-hot-middleware/client',
             entryPath
         ]
+
+        return entry[moduleName].slice()
     }
 
     public removeEntry(moduleName: string) {

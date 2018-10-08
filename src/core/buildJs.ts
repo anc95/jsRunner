@@ -5,6 +5,7 @@
  */
 import webpack,
 {
+    Compiler,
     Configuration
 } from 'webpack'
 import {
@@ -12,19 +13,41 @@ import {
 } from 'express'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
+import { Entry } from '../interfaces';
 
-function getFilePath(config: Configuration): string {
-    const output = config.output || {}
-    let {
-        publicPath = "/",
-        filename = "main.js"
-    } = output
-
-    return `${publicPath}${filename}`
+let hmrId = 0
+function genHMRPath() {
+    return `/__webpack_hmr_${hmrId++}`
 }
 
-export default function bundleJs(webpackOptions: Configuration, app: Application, callback: any) {
-    const compiler = webpack(<Configuration>webpackOptions)
+export default function buildJs<T>(config: Configuration, app: Application,entry: T) {
+    let currentHMRPath: string | null = null
+
+    function resolveConfig(config: Configuration, entry: any): Configuration {
+        console.log(entry)
+        for (let moduleName in entry) {
+            console.log(moduleName)
+            if (!Array.isArray(entry[moduleName])) {
+                break
+            }
+
+            currentHMRPath = genHMRPath()
+
+            config.entry[moduleName] = (<Array<string>>entry[moduleName]).map((item: string) => {
+                if (item.startsWith('webpack-hot-middleware/client') && !item.includes('path=')) {
+                    return `${item}?path=${currentHMRPath}`
+                }
+
+                return item
+            })
+        }
+
+        console.log('xxxxxx')
+        return config
+    }
+
+    config = resolveConfig(config, entry)
+    const compiler = webpack(config)
 
     app.use(webpackDevMiddleware(compiler, {
         logLevel: 'warn', publicPath: '/'
@@ -32,9 +55,7 @@ export default function bundleJs(webpackOptions: Configuration, app: Application
 
     app.use(webpackHotMiddleware(compiler, {
         log: console.log,
-        path: '/__webpack_hmr',
+        path: currentHMRPath,
         heartbeat: 10 * 1000
     }))
-
-    callback()
 }

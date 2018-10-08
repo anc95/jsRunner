@@ -31,32 +31,11 @@ function isJsFile(filePath: string): boolean {
     return /\.(js|es6|es|jsx|ts|tsx)$/.test(filePath.toLocaleLowerCase())
 }
 
-function generateEntryFile(dir: string, filePath: string): string {
-    let content = fs.readFileSync(filePath).toString()
-    const hash = crypto.createHash('md5').update(content).digest('hex')
-    const fileNameReult = /([a-zA-Z\.]+)\.[A-Za-z]*$/.exec(path.basename(filePath))
-    const fileName = fileNameReult && fileNameReult[1] || ''
-    const entryFilePath = path.join(dir, '.jsrunner-entry', `${hash}${fileName}.js`)
-
-    fsExtra.outputFileSync(
-        entryFilePath,
-        _.template(CONFIG.JS_TEMPLATE)({
-            content: `
-                ${content}
-                if (module.hot) {
-                    module.hot.accept();
-                }
-            `
-        })
-    )
-
-    return entryFilePath
-}
-
 jsFileRoute.get('*', function (req, res, next) {
     const {
         option,
-        webpackConfigger
+        webpackConfigger,
+        entryHandler
     } = req.app.locals
     const dir = option.dir
 
@@ -72,16 +51,15 @@ jsFileRoute.get('*', function (req, res, next) {
         }
 
         if (stat && stat.isFile()) {
-            const entry = generateEntryFile(dir, filePath)
+            const entryFile = entryHandler.generateEntryFile(filePath)
             const moduleName = resolveModuleName(filePath)
-            webpackConfigger.addEntry(moduleName, entry)
-            buildJs(webpackConfigger.config, req.app, () => {
-                res.send(
-                    _.template(CONFIG.INDEX_TEMPLATE)({
-                        serveredFilePath: calOutputPathName(webpackConfigger.config, moduleName)
-                    })
-                )
-            })
+            const entry = webpackConfigger.addEntry(moduleName, entryFile)
+            buildJs(webpackConfigger.config, req.app, {[moduleName]: entry})
+            res.send(
+                _.template(CONFIG.INDEX_TEMPLATE)({
+                    serveredFilePath: calOutputPathName(webpackConfigger.config, moduleName)
+                })
+            )
         }
         else {
             next()
