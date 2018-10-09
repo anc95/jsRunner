@@ -30,7 +30,7 @@ export default class RunJsImp implements RunJs {
     constructor(private option: Option) {}
 
     private ensureEntry() {
-        const entryHandler = new EntryImpl(this.app.locals.option.dir, '.jsrunner-entry')
+        const entryHandler = new EntryImpl(this.app.locals.option.dir, '.jsrunner-entry', this.app.locals.option)
         entryHandler.ensureEntryDir()
 
         return entryHandler

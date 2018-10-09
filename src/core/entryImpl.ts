@@ -1,5 +1,5 @@
 import {
-    Entry
+    Entry, Option
 } from '../interfaces'
 import fs from 'fs-extra'
 import path from 'path'
@@ -12,7 +12,8 @@ export default class EntryImpl implements Entry {
 
     constructor(
         private root: string,
-        private tmpDirName: string
+        private tmpDirName: string,
+        private option: Option
     ) {
         this.entryDir = path.join(this.root, this.tmpDirName || '.jsrunner-entry')
         this.processExitEvent()
@@ -39,7 +40,8 @@ export default class EntryImpl implements Entry {
         fs.outputFileSync(
             entryFilePath,
             _.template(CONFIG.JS_TEMPLATE)({
-                content: `import '${jsFilePath}'`
+                js: jsFilePath,
+                excutor: this.option.excutor
             })
         )
 

@@ -2,7 +2,8 @@ export interface Option {
     dir?: string
     plugins?: any[],
     loaders?: [],
-    port?: number
+    port?: number,
+    excutor?: string
     [propName: string]: any
 }
 

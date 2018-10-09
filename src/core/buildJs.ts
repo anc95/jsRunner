@@ -21,7 +21,7 @@ function genHMRPath() {
 }
 
 export default function buildJs<T>(config: Configuration, app: Application,entry: T) {
-    let currentHMRPath: string | null = null
+    let currentHMRPath: string = ''
 
     function resolveConfig(config: Configuration, entry: any): Configuration {
         console.log(entry)
@@ -32,8 +32,9 @@ export default function buildJs<T>(config: Configuration, app: Application,entry
             }
 
             currentHMRPath = genHMRPath()
-
+            // @ts-ignore
             config.entry[moduleName] = (<Array<string>>entry[moduleName]).map((item: string) => {
+                // @ts-ignore
                 if (item.startsWith('webpack-hot-middleware/client') && !item.includes('path=')) {
                     return `${item}?path=${currentHMRPath}`
                 }
@@ -42,7 +43,6 @@ export default function buildJs<T>(config: Configuration, app: Application,entry
             })
         }
 
-        console.log('xxxxxx')
         return config
     }
 
