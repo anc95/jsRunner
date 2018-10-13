@@ -5,23 +5,23 @@
  */
 
 const loaders = [
-    {
-        test: /\.jsx?$/,
-        include: [
-            // config.path.src
-        ],
-        use: [
-            {
-                loader: "babel-loader",
-                options: {
-                    presets: [
-                        'env',
-                        'react'
-                    ]
-                }
-            }
-        ]
-    },
+    // {
+    //     test: /\.jsx?$/,
+    //     include: [
+    //         // config.path.src
+    //     ],
+    //     use: [
+    //         // {
+    //         //     loader: "babel-loader",
+    //         //     options: {
+    //         //         presets: [
+    //         //             'env',
+    //         //             'react'
+    //         //         ]
+    //         //     }
+    //         // }
+    //     ]
+    // },
 ]
 
 export default loaders

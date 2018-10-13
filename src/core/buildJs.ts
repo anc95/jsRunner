@@ -13,7 +13,6 @@ import {
 } from 'express'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
-import { Entry } from '../interfaces';
 
 let hmrId = 0
 function genHMRPath() {

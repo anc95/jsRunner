@@ -5,6 +5,7 @@
  */
 import defaultLoaders from './loaders'
 import path from 'path'
+import CONFIG from '../config'
 import {
     Option,
     WebpackConfigger
@@ -12,7 +13,8 @@ import {
 import webpack, {
     Configuration
 } from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin'
+
+const webpackHotMiddleWarePath = path.resolve(CONFIG.PATH_NODE_MODULES, 'webpack-hot-middleware')
 
 interface WebpackEntry {
     [property: string]: any
@@ -43,13 +45,40 @@ export default class WebpackConfiggerImpl implements WebpackConfigger {
             module: {
                 rules: defaultLoaders.concat(<[]>loaders)
             },
+            resolveLoader: {
+                modules: [
+                    CONFIG.PATH_NODE_MODULES
+                ]
+            },
+            resolve: {
+                // modules: [
+                //     path.resolve(<string>dir, '../../../', 'node_modules')
+                // ],
+                alias: {
+                    // resolve the issue:
+                    // Cannot resolve module 'ie' in node_modules/superagent-no-cache
+                    // https://github.com/johntron/superagent-no-cache/issues/11
+                    'ie': 'component-ie',
+                    'webpack-hot-middleware': webpackHotMiddleWarePath,
+                    'less': path.resolve(CONFIG.PATH_NODE_MODULES, 'less'),
+                    'common': path.resolve(<string>dir, '../../src/frontend/', 'node_modules', 'common'),
+                    'utils': path.resolve(<string>dir, '../../src/frontend/', 'node_modules', 'utils'),
+                    '@befe': path.resolve(<string>dir, '../../src/frontend/', 'node_modules', '@befe')
+                }
+            },
             output: {
                 path: path.resolve(dir as string, 'dist'),
                 filename: '[name]'
             },
             plugins: [
                 new webpack.HotModuleReplacementPlugin(),
-                new webpack.NoEmitOnErrorsPlugin()
+                new webpack.NoEmitOnErrorsPlugin(),
+                new webpack.DefinePlugin({
+                    'process.env.NODE_ENV': '"development"',
+                    '__PRODUCTION__': false,
+                    '__DEVELOPMENT__': true,
+                    '__DEVTOOLS__': true
+                }),
             ]
         }
 

@@ -17,8 +17,7 @@ const jsFileRoute = Router()
 
 function resolveModuleName(path: string): string {
     path = path.replace(/\//g, '')
-    console.log(path)
-    return encodeURIComponent(path)
+    return encodeURIComponent(path).replace('%', '')
 }
 
 function calOutputPathName(config: Configuration, moduleName: string): string {
@@ -39,7 +38,7 @@ jsFileRoute.get('*', function (req, res, next) {
     } = req.app.locals
     const dir = option.dir
 
-    const filePath = path.join(dir, req.path)
+    const filePath = path.join(dir, decodeURIComponent(req.path))
 
     if (!isJsFile(filePath)) {
         return next()
