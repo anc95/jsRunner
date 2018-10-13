@@ -6,13 +6,9 @@
 import defaultLoaders from './loaders'
 import path from 'path'
 import CONFIG from '../config'
-import {
-    Option,
-    WebpackConfigger
-} from '../interfaces'
-import webpack, {
-    Configuration
-} from 'webpack';
+import {Option, WebpackConfigger} from '../interfaces'
+import webpack, {Configuration} from 'webpack'
+import npmInstall, {InstallOption} from './npmInstall'
 
 const webpackHotMiddleWarePath = path.resolve(CONFIG.PATH_NODE_MODULES, 'webpack-hot-middleware')
 
