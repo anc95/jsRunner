@@ -3,7 +3,7 @@
  * @description 构成webpack的构建配置
  * @date 2018年9月25日
  */
-import defaultLoaders from './loaders'
+import defaultLoaders from './rules'
 import path from 'path'
 import CONFIG from '../config'
 import {Option, WebpackConfigger} from '../interfaces'

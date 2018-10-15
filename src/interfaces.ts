@@ -1,8 +1,13 @@
 export interface Option {
     dir?: string
+    // webpack plugin
     plugins?: any[],
-    loaders?: [],
+    // webpack module
+    rules?: [],
+    // webpack resolve
+    resolve?: any,
     port?: number,
+    // excutor function
     excutor?: string
     [propName: string]: any
 }

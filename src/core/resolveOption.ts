@@ -3,11 +3,9 @@
  * @description resolve Option
  * @date 2018年9月24日
  */
-import {
-    Option
-} from '../interfaces'
+import {Option} from '../interfaces'
 import path from 'path'
-import fs from 'fs-extra'
+import resolveRules from './resolveRules'
 
 /**
  * resolve excutor
@@ -49,7 +47,7 @@ export default function resolveOption(option: Option): Option {
     const defaultOption: Option = {
         dir: process.cwd(),
         plugins: [],
-        loaders: [],
+        rules: [],
         port: 8888
     }
 
@@ -59,6 +57,7 @@ export default function resolveOption(option: Option): Option {
         }
     }
 
+    option.rules = resolveRules(option.rules)
     option.excutor = option.excutor ? resolveExcutor(<string>option.excutor, <string>option.dir) : ''
 
     return option
