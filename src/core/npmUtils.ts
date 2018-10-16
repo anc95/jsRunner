@@ -48,7 +48,7 @@ function execInstall(scriptString: string, cwd: string) {
     return spawnSync(<string>args.shift(), args, {cwd, stdio: 'inherit'})
 }
 
-export default function(installOption: InstallOption) {
+export function npmInstall(installOption: InstallOption) {
     let {
         devDependencies,
         dependencies,
@@ -83,4 +83,15 @@ export default function(installOption: InstallOption) {
     }
 
     info('npm end')
+}
+
+/**
+ * check if the specified package is installed in current dir
+ * @param packageName
+ * @param cwd
+ */
+export function hasInstalled(packageName: string, cwd: string) {
+    const packagePath = path.resolve(cwd, packageName)
+
+    return fs.statSync(packagePath).isDirectory()
 }
