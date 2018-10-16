@@ -22,6 +22,7 @@ import { Server } from 'http'
 import resolveOption from './core/resolveOption'
 import WebpackConfiggerImpl from './core/webpackConfiggerImpl'
 import EntryImpl from './core/entryImpl'
+import {info} from './core/log'
 
 export default class RunJsImp implements RunJs {
     private app: Express
@@ -43,7 +44,9 @@ export default class RunJsImp implements RunJs {
         this.app.locals.entryHandler = this.ensureEntry()
         this.app.use('/', jsFileRoute)
         this.app.use(express.static(this.app.locals.option.dir), serverIndex(this.app.locals.option.dir, {icons: true}))
-        this.server = this.app.listen(this.option.port || 8888)
+        this.server = this.app.listen(this.option.port || 8888, () => {
+            info(`server listening on http://localhost:${this.option.port || 8888}`)
+        })
     }
 
     public stop() {

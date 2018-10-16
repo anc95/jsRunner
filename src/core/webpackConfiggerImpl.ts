@@ -3,12 +3,12 @@
  * @description 构成webpack的构建配置
  * @date 2018年9月25日
  */
-import defaultLoaders from './rules'
 import path from 'path'
 import CONFIG from '../config'
 import {Option, WebpackConfigger} from '../interfaces'
 import webpack, {Configuration} from 'webpack'
 import {npmInstall, InstallOption} from './npmUtils'
+import * as _ from 'lodash'
 
 const webpackHotMiddleWarePath = path.resolve(CONFIG.PATH_NODE_MODULES, 'webpack-hot-middleware')
 
@@ -32,38 +32,33 @@ export default class WebpackConfiggerImpl implements WebpackConfigger {
     private resolveWebpackConfig(option: Option): Configuration {
         const {
             dir,
+            resolve = {},
+            rules,
+            plugins = [],
             loaders = []
         } = option
+
+        _.set(resolve, 'alias', {
+            'webpack-hot-middleware': webpackHotMiddleWarePath,
+            'less': path.resolve(CONFIG.PATH_NODE_MODULES, 'less'),
+            ..._.get(resolve, 'alias')
+        })
 
         const config: Configuration =  {
             mode: 'development',
             entry: {},
             module: {
-                rules: defaultLoaders.concat(<[]>loaders)
+                rules
             },
             resolveLoader: {
                 modules: [
                     CONFIG.PATH_NODE_MODULES
                 ]
             },
-            resolve: {
-                // modules: [
-                //     path.resolve(<string>dir, '../../../', 'node_modules')
-                // ],
-                alias: {
-                    // resolve the issue:
-                    // Cannot resolve module 'ie' in node_modules/superagent-no-cache
-                    // https://github.com/johntron/superagent-no-cache/issues/11
-                    'ie': 'component-ie',
-                    'webpack-hot-middleware': webpackHotMiddleWarePath,
-                    'less': path.resolve(CONFIG.PATH_NODE_MODULES, 'less'),
-                    'common': path.resolve(<string>dir, '../../src/frontend/', 'node_modules', 'common'),
-                    'utils': path.resolve(<string>dir, '../../src/frontend/', 'node_modules', 'utils'),
-                    '@befe': path.resolve(<string>dir, '../../src/frontend/', 'node_modules', '@befe')
-                }
-            },
+            resolve,
             output: {
                 path: path.resolve(dir as string, 'dist'),
+                publicPath: '/',
                 filename: '[name]'
             },
             plugins: [
@@ -75,7 +70,7 @@ export default class WebpackConfiggerImpl implements WebpackConfigger {
                     '__DEVELOPMENT__': true,
                     '__DEVTOOLS__': true
                 }),
-            ]
+            ].concat(plugins)
         }
 
         return config

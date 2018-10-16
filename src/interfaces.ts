@@ -3,7 +3,7 @@ export interface Option {
     // webpack plugin
     plugins?: any[],
     // webpack module
-    rules?: [],
+    rules?: any[],
     // webpack resolve
     resolve?: any,
     port?: number,

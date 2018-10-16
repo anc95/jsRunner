@@ -5,7 +5,7 @@
  */
 import {Option} from '../interfaces'
 import path from 'path'
-import resolveRules from './resolveRules'
+import {resolveRules} from './rules'
 
 /**
  * resolve excutor
@@ -14,7 +14,7 @@ import resolveRules from './resolveRules'
  */
 function resolveExcutor(excutor: string, root: string): string | undefined {
     // @ts-ignore
-    const invalidExutorError = Symbol('invalid excutor error')
+    const invalidExutorError = 'invalid excutor error'
 
     if (typeof excutor !== 'string') {
         console.warn(`param excutor expected to be string or function, but got ${excutor}`)
@@ -26,7 +26,7 @@ function resolveExcutor(excutor: string, root: string): string | undefined {
     let excutorPath: string = excutor.startsWith('.') ? path.join(root, excutor) : excutor
 
     try {
-        let isFunc = typeof require(excutor) === 'function' || typeof require(excutor).default === 'function')
+        let isFunc = (typeof require(excutor) === 'function' || typeof require(excutor).default === 'function')
 
         if (!isFunc) {
             throw new Error(invalidExutorError)

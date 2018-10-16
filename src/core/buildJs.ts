@@ -49,7 +49,8 @@ export default function buildJs<T>(config: Configuration, app: Application,entry
     const compiler = webpack(config)
 
     app.use(webpackDevMiddleware(compiler, {
-        logLevel: 'warn', publicPath: '/'
+        logLevel: 'warn',
+        publicPath: <string>config!.output!.publicPath,
     }))
 
     app.use(webpackHotMiddleware(compiler, {
