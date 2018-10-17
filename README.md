@@ -16,7 +16,7 @@ npm i js-runner -g
 ## feature
 - use webpack@4 to bundle code
 - read rules config and install dependencies automatically
-- hot load
+- hot reload
 
 ## option
 ``` typescript
