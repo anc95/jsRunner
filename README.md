@@ -1,6 +1,8 @@
 # jsRunner
 a server to excute js code
 
+![img](https://api.travis-ci.org/anc95/jsRunner.svg?branch=master)
+
 ## install
 ``` javascript
 // global
