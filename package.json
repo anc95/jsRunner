@@ -1,11 +1,15 @@
 {
   "name": "js-runner",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "run-js in",
   "main": "./build/index.js",
   "repository": "git@github.com:anc95/jsRunner.git",
   "scripts": {
-    "test": "node_modules/.bin/jest"
+    "start": "tsc -h",
+    "build": "tsc",
+    "prepare": "npm build",
+    "test": "node_modules/.bin/jest",
+    "coverage": "jest --coverage"
   },
   "author": "",
   "license": "MIT",

@@ -9,8 +9,7 @@
     "strict": true,
     "allowSyntheticDefaultImports": true,
     // "noImplicitAny": true,
-    "esModuleInterop": true,
-    "watch": true
+    "esModuleInterop": true
   },
   "exclude": [
     // "src/__test__/*"

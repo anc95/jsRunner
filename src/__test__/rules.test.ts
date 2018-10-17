@@ -25,7 +25,7 @@ describe('rules config parser', () => {
     })
 
     describe('parse the rules dependencies', () => {
-        it.only('shoule parse correact', () => {
+        it('shoule parse correact', () => {
             const rules: Rule[] = [
                 {
                     test: /\.less$/,

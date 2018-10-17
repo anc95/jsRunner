@@ -25,13 +25,17 @@ import EntryImpl from './core/entryImpl'
 import {info} from './core/log'
 
 export default class RunJsImp implements RunJs {
-    private app: Express
-    private server: Server
+    private app: Express | null = null
+    private server: Server | null = null
 
-    constructor(private option: Option) {}
+    constructor(private option: Option) {
+        process.on('SIGINT', () => {
+            this.stop()
+        })
+    }
 
     private ensureEntry() {
-        const entryHandler = new EntryImpl(this.app.locals.option.dir, '.jsrunner-entry', this.app.locals.option)
+        const entryHandler = new EntryImpl(this.app!.locals.option.dir, '.jsrunner-entry', this.app!.locals.option)
         entryHandler.ensureEntryDir()
 
         return entryHandler
@@ -50,6 +54,6 @@ export default class RunJsImp implements RunJs {
     }
 
     public stop() {
-        this.server.close()
+        this.server && this.server.close()
     }
 }

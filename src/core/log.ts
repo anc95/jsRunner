@@ -1,7 +1,6 @@
 /**
  * simple log
  */
-
 import chalk from 'chalk'
 
 export function info(...args: string[]) {

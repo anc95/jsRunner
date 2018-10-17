@@ -6,7 +6,7 @@
 import path from 'path'
 import CONFIG from '../config'
 import {Option, WebpackConfigger} from '../interfaces'
-import webpack, {Configuration} from 'webpack'
+import webpack, {Configuration, RuleSetRule} from 'webpack'
 import {npmInstall, InstallOption} from './npmUtils'
 import * as _ from 'lodash'
 
@@ -48,7 +48,7 @@ export default class WebpackConfiggerImpl implements WebpackConfigger {
             mode: 'development',
             entry: {},
             module: {
-                rules
+                rules: <Array<RuleSetRule>>rules
             },
             resolveLoader: {
                 modules: [
