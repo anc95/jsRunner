@@ -35,7 +35,7 @@ new JsRunner({
 }).start()
 ```
 
-### cli usssage
+### cli usage
 ```
 Usage: js-runner [options]
 

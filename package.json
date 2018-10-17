@@ -1,13 +1,14 @@
 {
-  "name": "run-js",
-  "version": "1.0.0",
+  "name": "js-runner",
+  "version": "1.0.2",
   "description": "run-js in",
-  "main": "index.js",
+  "main": "./build/index.js",
+  "repository": "git@github.com:anc95/jsRunner.git",
   "scripts": {
     "test": "node_modules/.bin/jest"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bin": {
     "js-runner": "./bin/index"
   },
