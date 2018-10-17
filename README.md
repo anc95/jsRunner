@@ -2,6 +2,7 @@
 a server to excute js code
 
 ![img](https://api.travis-ci.org/anc95/jsRunner.svg?branch=master)
+[![codecov](https://codecov.io/gh/anc95/jsRunner/branch/master/graph/badge.svg)](https://codecov.io/gh/anc95/jsRunner)
 
 ## install
 ``` javascript
