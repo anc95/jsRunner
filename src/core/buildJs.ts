@@ -23,9 +23,7 @@ export default function buildJs<T>(config: Configuration, app: Application,entry
     let currentHMRPath: string = ''
 
     function resolveConfig(config: Configuration, entry: any): Configuration {
-        console.log(entry)
         for (let moduleName in entry) {
-            console.log(moduleName)
             if (!Array.isArray(entry[moduleName])) {
                 break
             }
@@ -46,6 +44,7 @@ export default function buildJs<T>(config: Configuration, app: Application,entry
     }
 
     config = resolveConfig(config, entry)
+    console.log(config)
     const compiler = webpack(config)
 
     app.use(webpackDevMiddleware(compiler, {

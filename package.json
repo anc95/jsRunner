@@ -5,7 +5,7 @@
   "main": "./build/index.js",
   "repository": "git@github.com:anc95/jsRunner.git",
   "scripts": {
-    "start": "tsc -h",
+    "start": "tsc -w",
     "build": "tsc",
     "prepare": "npm build",
     "test": "node_modules/.bin/jest",
@@ -61,8 +61,6 @@
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
     "lodash": "^4.17.11",
-    "react": "^15.6.2",
-    "react-dom": "^15.4.2",
     "serve-index": "^1.9.1",
     "style-loader": "^0.23.1",
     "svg-sprite-loader": "^4.1.2",

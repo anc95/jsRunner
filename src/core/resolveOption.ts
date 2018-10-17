@@ -57,6 +57,7 @@ export default function resolveOption(option: Option): Option {
         }
     }
 
+    option.dir = path.join(process.cwd(), <string>option.dir),
     option.rules = resolveRules(option.rules)
     option.excutor = option.excutor ? resolveExcutor(<string>option.excutor, <string>option.dir) : ''
 

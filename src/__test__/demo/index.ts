@@ -1,8 +1,7 @@
-import JsRunner from '../../index'
-import path from 'path'
+import RunJsImp from '../../index'
 
 const config = {
-    dir: path.resolve(__dirname, '..')
+    dir: './'
 }
 
-new JsRunner(config).start()
+new RunJsImp(config).start()

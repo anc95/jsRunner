@@ -3,28 +3,12 @@
  * @description loaders
  * @date Sep 26, 2018
  */
-import {Rule, RuleSetUse, RuleSetUseItem, RuleSetLoader} from 'webpack'
+import {Rule, RuleSetUseItem, RuleSetLoader} from 'webpack'
 import {hasInstalled} from './npmUtils'
-import { type } from 'os';
 import fs from 'fs-extra';
 
 export const jsRule: Rule = {
-    test: /\.js$/,
-    exclude: /node_modules/,
-    use: [
-        {
-            loader: "babel-loader",
-            options: {
-                presets: [
-                    '@babel/env'
-                ]
-            }
-        }
-    ]
-}
-
-export const jsxRule: Rule = {
-    test: /\.jsx$/,
+    test: /\.jsx?$/,
     exclude: /node_modules/,
     use: [
         {
@@ -39,9 +23,10 @@ export const jsxRule: Rule = {
     ]
 }
 
+
 export function resolveRules(rules: any): Rule[] {
-    if (!rules) {
-        return (<Rule[]>[]).concat(jsxRule, jsRule)
+    if (!rules || rules.length === 0) {
+        return [jsRule]
     }
 
     function hasMatched(pathName: string): boolean {
@@ -55,8 +40,7 @@ export function resolveRules(rules: any): Rule[] {
     const matchedJs = hasMatched('a.js')
     const matchedJsx = hasMatched('a.jsx')
 
-    matchedJs || rules.push(jsRule)
-    matchedJsx || rules.push(jsxRule)
+    matchedJs || matchedJsx || rules.concat(jsRule)
 
     return rules
 }

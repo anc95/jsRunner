@@ -3,6 +3,7 @@ a server to excute js code
 
 ![img](https://api.travis-ci.org/anc95/jsRunner.svg?branch=master)
 [![codecov](https://codecov.io/gh/anc95/jsRunner/branch/master/graph/badge.svg)](https://codecov.io/gh/anc95/jsRunner)
+![gif](./static/isrunner-demo.gif)
 
 ## install
 ``` javascript
@@ -12,7 +13,12 @@ npm i js-runner -g
 npm i js-runner -g
 ```
 
-## usage
+## feature
+- use webpack@4 to bundle code
+- read rules config and install dependencies automatically
+- hot load
+
+## option
 ``` typescript
 export interface Option {
     dir?: string
@@ -39,7 +45,8 @@ new JsRunner({
 ```
 
 ### cli usage
-```
+```bash
+$ js-runner -h
 Usage: js-runner [options]
 
 
@@ -50,4 +57,9 @@ Usage: js-runner [options]
     -p, --port <n>  listening port
     -c, --config    js.runner.config.js file
     -h, --help      output usage information
+```
+
+```bash
+$ code ./folder
+$ js-runner
 ```

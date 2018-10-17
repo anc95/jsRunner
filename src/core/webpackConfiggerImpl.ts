@@ -80,7 +80,7 @@ export default class WebpackConfiggerImpl implements WebpackConfigger {
         const entry = this.config.entry as WebpackEntry
 
         if (entry[moduleName]) {
-            return false
+            return entry[moduleName]
         }
 
         entry[moduleName] = [

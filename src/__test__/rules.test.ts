@@ -1,8 +1,7 @@
 import {
     getNeedInstallPackages,
     resolveRules,
-    jsRule,
-    jsxRule
+    jsRule
 } from '../core/rules'
 import {Rule} from 'webpack'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
@@ -10,17 +9,18 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin'
 describe('rules config parser', () => {
     describe('resolve rules', () => {
         it('should contains default jsx and js loader', () => {
-            expect(resolveRules([])).toEqual([jsRule, jsxRule])
+            expect(resolveRules([])).toEqual([jsRule])
         })
 
-        it('should contains default jsx loader', () => {
+        it('should overwrite default jsx loader', () => {
             const rules: Rule[] = [
                 {
                     test: /\.js$/
                 }
             ]
-            const result = rules.slice().concat(jsxRule)
-            expect(resolveRules(rules)).toEqual(result)
+            const result = rules.slice().concat(jsRule)
+            // @ts-ignore
+            expect(resolveRules(rules)).toEqual(expect.not.arrayContaining(result))
         })
     })
 
