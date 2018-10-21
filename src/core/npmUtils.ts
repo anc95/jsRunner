@@ -10,15 +10,15 @@ import {info} from './log'
 
 export interface InstallOption {
     // the dev dependencies to download
-    devDependencies: string | string[]
+    devDependencies?: string | string[]
     // the dev dependencies to download
-    dependencies: string | string[]
+    dependencies?: string | string[]
     // default to be 'npm', can choose 'cnpm' and so on
-    npmScript: string,
+    npmScript?: string,
     // default to be process.cwd()
-    cwd: string,
+    cwd?: string,
     // if global install, default to be false
-    globalPackages: string | string[]
+    globalPackages?: string | string[]
 }
 
 /**
@@ -48,11 +48,11 @@ function execInstall(scriptString: string, cwd: string) {
     return spawnSync(<string>args.shift(), args, {cwd, stdio: 'inherit'})
 }
 
-export function npmInstall(installOption: InstallOption) {
+function npmInstall(installOption: InstallOption) {
     let {
-        devDependencies,
-        dependencies,
-        globalPackages,
+        devDependencies = [],
+        dependencies = [],
+        globalPackages = [],
         npmScript = 'npm',
         cwd = process.cwd(),
     } = installOption
@@ -90,8 +90,13 @@ export function npmInstall(installOption: InstallOption) {
  * @param packageName
  * @param cwd
  */
-export function hasInstalled(packageName: string, cwd: string) {
-    const packagePath = path.resolve(cwd, packageName)
+function hasInstalled(packageName: string, cwd: string) {
+    const packagePath = path.resolve(cwd, 'node_modules', packageName)
 
     return fs.statSync(packagePath).isDirectory()
+}
+
+export {
+    hasInstalled,
+    npmInstall
 }

@@ -8,6 +8,8 @@ import CONFIG from '../config'
 import {Option, WebpackConfigger} from '../interfaces'
 import webpack, {Configuration, RuleSetRule} from 'webpack'
 import {npmInstall, InstallOption} from './npmUtils'
+// import NpmInstallPlugin from 'npm-install-webpack-plugin'
+// import InstallDepPlugin from './installDepPlugin'
 import * as _ from 'lodash'
 
 const webpackHotMiddleWarePath = path.resolve(CONFIG.PATH_NODE_MODULES, 'webpack-hot-middleware')

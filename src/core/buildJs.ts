@@ -13,10 +13,34 @@ import {
 } from 'express'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
+import {npmInstall} from './npmUtils'
 
 let hmrId = 0
 function genHMRPath() {
     return `/__webpack_hmr_${hmrId++}`
+}
+
+/**
+ * analyse error message to install cant resolved module automatically
+ * @param errorMsg {string}
+ */
+function analyseErrorMsg(errorMsg: string) {
+    const result = /Error: Cannot find module '(.*)' from '(.*)'/.exec(errorMsg)
+    if (result === null) {
+        return false
+    }
+
+    const moduleName: string | null = result[1]
+    const context: string | null = result[2]
+
+    if (!moduleName || !context) {
+        return false
+    }
+
+    return npmInstall({
+        devDependencies: [moduleName],
+        cwd: context
+    })
 }
 
 export default function buildJs<T>(config: Configuration, app: Application,entry: T) {
@@ -44,7 +68,6 @@ export default function buildJs<T>(config: Configuration, app: Application,entry
     }
 
     config = resolveConfig(config, entry)
-    console.log(config)
     const compiler = webpack(config)
 
     app.use(webpackDevMiddleware(compiler, {

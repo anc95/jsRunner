@@ -15,8 +15,11 @@ export const jsRule: Rule = {
             loader: "babel-loader",
             options: {
                 presets: [
-                    '@babel/env',
-                    '@babel/react'
+                    require('@babel/preset-env'),
+                    require('@babel/preset-react')
+                ],
+                plugins: [
+                    'babel-plugin-transform-class-properties'
                 ]
             }
         }

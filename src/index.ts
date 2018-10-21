@@ -30,7 +30,9 @@ export default class RunJsImp implements RunJs {
 
     constructor(private option: Option) {
         process.on('SIGINT', () => {
+            (<Express>this.app).locals.entryHandler.exit()
             this.stop()
+            process.exit()
         })
     }
 

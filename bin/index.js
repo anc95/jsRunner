@@ -11,10 +11,8 @@ program
   .parse(process.argv);
 
 var option = {
-    dir: path.resolve(process.cwd(), program.root),
+    dir: path.resolve(process.cwd(), program.root || ''),
     port: program.port,
 }
-
-console.log(option)
 
 new JsRunner(option).start()

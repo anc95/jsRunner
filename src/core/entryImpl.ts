@@ -15,14 +15,11 @@ export default class EntryImpl implements Entry {
         private tmpDirName: string,
         private option: Option
     ) {
-        this.entryDir = path.join(this.root, this.tmpDirName || '.jsrunner-entry')
-        this.processExitEvent()
+        this.entryDir = path.resolve(this.root, this.tmpDirName || '.jsrunner-entry')
     }
 
-    private processExitEvent() {
-        process.on('SIGINT', () => {
-            fs.removeSync(this.entryDir)
-        })
+    public exit() {
+        fs.removeSync(this.entryDir)
     }
 
     public ensureEntryDir() {
